@@ -4,7 +4,7 @@ from fastapi import FastAPI, UploadFile, File, HTTPException, Query
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from .storage import save_image, load_all, load_one, update_annotations, get_filter_options
+from .storage import save_image, load_all, load_one, update_annotations, get_filter_options, delete_record
 from .classifier import classify_image
 from .models import AnnotationUpdate
 
@@ -121,6 +121,15 @@ def patch_annotations(record_id: str, body: AnnotationUpdate):
     if not record:
         raise HTTPException(status_code=404, detail="Image not found.")
     return record
+
+
+# ── DELETE /images/{id} ──────────────────────────────────────────────────────
+@app.delete("/images/{record_id}")
+def remove_image(record_id: str):
+    """Delete image file and record from disk."""
+    if not delete_record(record_id):
+        raise HTTPException(status_code=404, detail="Image not found.")
+    return {"deleted": record_id}
 
 
 # ── GET /images/{id} ─────────────────────────────────────────────────────────

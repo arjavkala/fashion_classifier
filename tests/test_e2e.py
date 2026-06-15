@@ -63,7 +63,6 @@ def test_upload_returns_record(mock_classify):
     assert record["season"] == "summer"
     assert "id" in record
     assert "created_at" in record
-    return record["id"]
 
 
 @patch("app.backend.main.classify_image", return_value=MOCK_CLASSIFICATION)

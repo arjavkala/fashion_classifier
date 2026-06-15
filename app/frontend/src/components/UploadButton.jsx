@@ -45,12 +45,30 @@ export default function UploadButton({ onUploadSuccess, setLoading }) {
       />
       <label
         htmlFor="upload-input"
-        style={{ backgroundColor: uploading ? '#555' : '#2D6A4F', cursor: uploading ? 'not-allowed' : 'pointer' }}
-        className="text-white text-sm font-medium px-4 py-2 rounded-lg select-none transition-colors"
+        style={{
+          backgroundColor: uploading ? '#555' : '#2D6A4F',
+          cursor: uploading ? 'not-allowed' : 'pointer',
+          boxShadow: uploading ? 'none' : '0 2px 8px rgba(45,106,79,0.35)'
+        }}
+        className="flex items-center gap-2 text-white text-sm font-medium px-5 py-2.5 rounded-full select-none transition-all"
       >
-        {uploading ? 'Classifying...' : 'Upload Image'}
+        {uploading ? (
+          <>
+            <svg className="animate-spin" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <circle cx="7" cy="7" r="5.5" stroke="white" strokeWidth="1.5" strokeDasharray="8 6" />
+            </svg>
+            Classifying...
+          </>
+        ) : (
+          <>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M7 1v12M1 7h12" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            Upload
+          </>
+        )}
       </label>
-      {error && <p className="text-red-500 text-xs">{error}</p>}
+      {error && <p className="text-red-400 text-xs mt-1">{error}</p>}
     </div>
   )
 }

@@ -33,14 +33,14 @@ def save_image(file_bytes: bytes, filename: str, metadata: dict) -> dict:
 
 
 def load_all() -> list[dict]:
-    """Load all JSON records from uploads directory."""
+    """Load all JSON records from uploads directory, newest first."""
     records = []
     for p in UPLOAD_DIR.glob("*.json"):
         try:
             records.append(json.loads(p.read_text()))
         except Exception:
             continue
-    return records
+    return sorted(records, key=lambda r: r.get("created_at", ""), reverse=True)
 
 
 def load_one(record_id: str) -> dict | None:
@@ -61,6 +61,19 @@ def update_annotations(record_id: str, annotations: str, tags: list[str]) -> dic
     record["annotation_tags"] = tags
     path.write_text(json.dumps(record, indent=2))
     return record
+
+
+def delete_record(record_id: str) -> bool:
+    """Delete image file and JSON record. Returns True if deleted, False if not found."""
+    json_path = UPLOAD_DIR / f"{record_id}.json"
+    if not json_path.exists():
+        return False
+    record = json.loads(json_path.read_text())
+    img_path = Path(record.get("file_path", ""))
+    if img_path.exists():
+        img_path.unlink()
+    json_path.unlink()
+    return True
 
 
 def get_filter_options() -> dict:

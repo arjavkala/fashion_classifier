@@ -8,6 +8,9 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8000',
         rewrite: (path) => path.replace(/^\/api/, '')
+      },
+      '/uploads': {
+        target: 'http://localhost:8000'
       }
     }
   }

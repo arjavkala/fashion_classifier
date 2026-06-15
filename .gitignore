@@ -7,5 +7,6 @@ uploads/*.jpg
 uploads/*.jpeg
 uploads/*.png
 uploads/*.webp
+uploads/*.json
 dist/
 .DS_Store

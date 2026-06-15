@@ -1,8 +1,11 @@
 import base64
 import json
+import logging
 import os
 from anthropic import Anthropic
 from dotenv import load_dotenv
+
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -91,5 +94,6 @@ def classify_image(image_bytes: bytes, media_type: str) -> dict:
             if raw.startswith("json"):
                 raw = raw[4:]
         return json.loads(raw)
-    except Exception:
+    except Exception as e:
+        logger.warning("classify_image failed: %s", e)
         return FALLBACK_METADATA
